@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 public class AccountingApp {
+    static String file = "src/main/resources/transactions.csv";
 
     public static void main(String[] args) {
         System.out.println("Bonjure! This Is My Accounting App");
