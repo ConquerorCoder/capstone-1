@@ -1,7 +1,10 @@
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class AccountingApp {
-    static String file = "src/main/resources/transactions.csv";
+    static String filename = "src/main/resources/transactions.csv";
 
     public static void main(String[] args) {
         System.out.println("Bonjure! This Is My Accounting App");
@@ -32,10 +35,43 @@ public class AccountingApp {
 
     // (compile check)
     public static void addTransaction(Scanner in, boolean isDeposit) {
-        System.out.println(" addTransaction called");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd|hh:mm a");
+        String dateTime = now.format(formatter);
+
+        System.out.print("Description: ");
+        String description = in.nextLine();
+
+        System.out.print("Vendor ");
+        String vendor = in.nextLine();
+
+        System.out.print("Enter the amount: ");
+        double amount = Double.parseDouble(in.nextLine());
+
+        String type = isDeposit ? "DEPOSIT" : "PAYMENT";
+
+        String record = dateTime + "|" + type + "|" + description + "|" + vendor + "|" + amount;
+
+        File file = new File(filename);
+        boolean isEmpty = file.length() == 0;
+
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            if (isEmpty) {
+                String header ="date|time|description|vendor|amount";
+                writer.write(header);
+                writer.newLine();
+
+            }
+            writer.write(record);
+            writer.newLine(); // moves to the next line after each record
+            System.out.println("Transaction recorded successfully!");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 
     public static void showLedger() {
-        System.out.println(" showLedger called");
+
     }
 }
