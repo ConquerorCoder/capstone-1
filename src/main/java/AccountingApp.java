@@ -48,6 +48,11 @@ public class AccountingApp {
         System.out.print("Enter the amount: ");
         double amount = Double.parseDouble(in.nextLine());
 
+        // make payments negative no matter the input
+        if(!isDeposit){
+            amount = amount* -1;
+        }
+
         String type = isDeposit ? "DEPOSIT" : "PAYMENT";
 
         String record = dateTime + "|" + type + "|" + description + "|" + vendor + "|" + amount;
