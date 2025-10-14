@@ -77,6 +77,24 @@ public class AccountingApp {
     }
 
     public static void showLedger() {
+        System.out.println("\n---- Ledger ----");
+
+        // Step 1: Create a File object for your transactions file
+        File f = new File(filename);
+
+        // Step 2: Check if the file exists or is empty
+        if (!f.exists() || f.length() == 0) {
+            System.out.println("No transactions yet.");
+            return;
+        }
+
+        // Step 3: Read the file contents (placeholder for now)
+        try {
+            // TODO: Use BufferedReader to read each line later
+            System.out.println(" This is where ledger entries will be displayed.");
+        } catch (Exception e) {
+            System.out.println("Error reading ledger.");
+        }
 
     }
 }
