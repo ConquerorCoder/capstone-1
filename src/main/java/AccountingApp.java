@@ -49,8 +49,8 @@ public class AccountingApp {
         double amount = Double.parseDouble(in.nextLine());
 
         // make payments negative no matter the input
-        if(!isDeposit){
-            amount = amount* -1;
+        if (!isDeposit) {
+            amount = amount * -1;
         }
 
         String type = isDeposit ? "DEPOSIT" : "PAYMENT";
@@ -63,7 +63,7 @@ public class AccountingApp {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             if (isEmpty) {
-                String header ="date|time|description|vendor|amount";
+                String header = "date|time|description|vendor|amount";
                 writer.write(header);
                 writer.newLine();
 
@@ -87,14 +87,14 @@ public class AccountingApp {
             System.out.println("No transactions yet.");
             return;
         }
-
-        // Step 3: Read the file contents (placeholder for now)
-        try {
-            // TODO: Use BufferedReader to read each line later
-            System.out.println(" This is where ledger entries will be displayed.");
-        } catch (Exception e) {
-            System.out.println("Error reading ledger.");
+        //file reading with BufferReader
+        try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading ledger: " + e.getMessage());
         }
-
     }
 }
