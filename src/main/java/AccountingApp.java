@@ -113,14 +113,40 @@ public class AccountingApp {
             else if (choice.equals("2")) System.out.println("Previous Month - Coming soon");
             else if (choice.equals("3")) System.out.println("Year To Date - Coming soon");
             else if (choice.equals("4")) System.out.println("Previous Year - Coming soon");
-            else if (choice.equals("5")) System.out.println("Search by Vendor - Coming soon");
+            else if (choice.equals("5")) searchByVendor(in);
             else if (choice.equals("0")) inReports = false;
             else System.out.println("Invalid choice.");
         }
     }
+    public static void searchByVendor(Scanner in) {
+        System.out.print("Enter vendor name: ");
+        String searchVendor = in.nextLine().trim();
+
+        List<Transaction> transactions = readTransactions();
+        List<Transaction> matches = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            if (t.vendor.equalsIgnoreCase(searchVendor)) {
+                matches.add(t);
+            }
+        }
+
+        if (matches.isEmpty()) {
+            System.out.println("No transactions found for vendor: " + searchVendor);
+        } else {
+            System.out.println("\n---- Transactions for " + searchVendor + " ----");
+            System.out.printf("%-12s %-10s %-25s %-20s %10s%n",
+                    "date","time","description","vendor", "amount");
+            System.out.println("--------------------------------------------------------------------------------");
+
+            for (Transaction t : matches) {
+                System.out.printf("%-12s %-10s %-25s %-20s %10.2f%n",
+                        t.date, t.time, t.description, t.vendor, t.amount);
+            }
+        }
+    }
 
     //  Display all ledger entries (newest first)
-    // Display ledger with filter (ALL, DEPOSITS, or PAYMENTS)
     public static void displayLedger(String filterType) {
         List<Transaction> transactions = readTransactions();
 
