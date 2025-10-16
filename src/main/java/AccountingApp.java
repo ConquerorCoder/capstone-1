@@ -74,7 +74,7 @@ public class AccountingApp {
         }
     }
 
-    // NEW: Ledger menu
+    //  Ledger menu
     public static void showLedgerMenu(Scanner in) {
         boolean inLedger = true;
         while (inLedger) {
@@ -90,13 +90,36 @@ public class AccountingApp {
             if (choice.equals("A")) displayLedger("All");
             else if (choice.equals("D")) displayLedger("Deposits");
             else if (choice.equals("P")) displayLedger("Payments");
-            else if (choice.equals("R")) System.out.println("Reports - Coming soon");
+            else if (choice.equals("R")) showReportsMenu(in);
             else if (choice.equals("H")) inLedger = false;
             else System.out.println("Invalid choice.");
         }
     }
+    // NEW: Reports menu
+    public static void showReportsMenu(Scanner in) {
+        boolean inReports = true;
+        while (inReports) {
+            System.out.println("\n---- Reports Menu ----");
+            System.out.println("1) Month To Date");
+            System.out.println("2) Previous Month");
+            System.out.println("3) Year To Date");
+            System.out.println("4) Previous Year");
+            System.out.println("5) Search by Vendor");
+            System.out.println("0) Back to Ledger");
+            System.out.print("Enter choice: ");
+            String choice = in.nextLine().trim();
 
-    // NEW: Display all ledger entries (newest first)
+            if (choice.equals("1")) System.out.println("Month To Date - Coming soon");
+            else if (choice.equals("2")) System.out.println("Previous Month - Coming soon");
+            else if (choice.equals("3")) System.out.println("Year To Date - Coming soon");
+            else if (choice.equals("4")) System.out.println("Previous Year - Coming soon");
+            else if (choice.equals("5")) System.out.println("Search by Vendor - Coming soon");
+            else if (choice.equals("0")) inReports = false;
+            else System.out.println("Invalid choice.");
+        }
+    }
+
+    //  Display all ledger entries (newest first)
     // Display ledger with filter (ALL, DEPOSITS, or PAYMENTS)
     public static void displayLedger(String filterType) {
         List<Transaction> transactions = readTransactions();
@@ -125,7 +148,7 @@ public class AccountingApp {
     }
 
 
-    // NEW: Read transactions from file and return as list (newest first)
+    //  Read transactions from file and return as list (newest first)
     public static List<Transaction> readTransactions() {
         List<Transaction> transactions = new ArrayList<>();
         File f = new File(filename);
@@ -162,7 +185,7 @@ public class AccountingApp {
         return transactions;
     }
 
-    // NEW: Transaction class to hold transaction data
+    // Transaction class to hold transaction data
     static class Transaction {
         String date;
         String time;
