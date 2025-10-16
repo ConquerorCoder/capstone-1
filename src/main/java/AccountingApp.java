@@ -237,10 +237,14 @@ public class AccountingApp {
         }
 
         System.out.println("\n---- " + filterType + " ----");
+        System.out.printf("%-12s %-10s %-25s %-20s %10s%n",
+                "date", "time", "description", "vendor", "amount");
+        System.out.println("--------------------------------------------------------------------------------");
+
         for (Transaction t : transactions) {
             boolean shouldDisplay = false;
 
-            if (filterType.equals("ALL")) {
+            if (filterType.equals("All")) {
                 shouldDisplay = true;
             } else if (filterType.equals("Deposits") && t.amount > 0) {
                 shouldDisplay = true;
@@ -249,7 +253,8 @@ public class AccountingApp {
             }
 
             if (shouldDisplay) {
-                System.out.println(t.date + " " + t.time + " | " + t.description + " | " + t.vendor + " | $" + t.amount);
+                System.out.printf("%-12s %-10s %-25s %-20s $%10.2f%n",
+                        t.date, t.time, t.description, t.vendor, t.amount);
             }
         }
     }
