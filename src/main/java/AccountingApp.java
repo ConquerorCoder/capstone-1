@@ -109,13 +109,94 @@ public class AccountingApp {
             System.out.print("Enter choice: ");
             String choice = in.nextLine().trim();
 
-            if (choice.equals("1")) System.out.println("Month To Date - Coming soon");
-            else if (choice.equals("2")) System.out.println("Previous Month - Coming soon");
-            else if (choice.equals("3")) System.out.println("Year To Date - Coming soon");
-            else if (choice.equals("4")) System.out.println("Previous Year - Coming soon");
+            if (choice.equals("1")) displayMonthToDate();
+            else if (choice.equals("2"))displayPreviousMonth();
+            else if (choice.equals("3")) displayYearToDate();
+            else if (choice.equals("4")) displayPreviousYear();
             else if (choice.equals("5")) searchByVendor(in);
             else if (choice.equals("0")) inReports = false;
             else System.out.println("Invalid choice.");
+        }
+    }
+    // Month To Date report
+    public static void displayMonthToDate() {
+        LocalDateTime now = LocalDateTime.now();
+        int currentMonth = now.getMonthValue();// Returns the month as a number (1-12)
+        // January = 1, February = 2, ... December = 12
+        int currentYear = now.getYear();  // Returns the year as a number (e.g., 2024, 2025)
+
+        displayDateFilteredTransactions("Month To Date", currentYear, currentMonth, currentYear, currentMonth);
+    }
+
+    // Previous Month report
+    public static void displayPreviousMonth() {
+        LocalDateTime now = LocalDateTime.now().minusMonths(1);
+        int prevMonth = now.getMonthValue();
+        int prevYear = now.getYear();
+
+        displayDateFilteredTransactions("Previous Month", prevYear, prevMonth, prevYear, prevMonth);
+    }
+
+    // Year To Date report
+    public static void displayYearToDate() {
+        LocalDateTime now = LocalDateTime.now();
+        int currentYear = now.getYear();
+
+        displayDateFilteredTransactions("Year To Date", currentYear, 1, currentYear, 12);
+    }
+
+    // Previous Year report
+    public static void displayPreviousYear() {
+        LocalDateTime now = LocalDateTime.now();
+        int prevYear = now.getYear() - 1;
+
+        displayDateFilteredTransactions("Previous Year", prevYear, 1, prevYear, 12);
+    }
+
+    // Helper method to display transactions within a date range
+    public static void displayDateFilteredTransactions(String reportName, int startYear, int startMonth, int endYear, int endMonth) {
+        List<Transaction> transactions = readTransactions();
+        List<Transaction> matches = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            try {
+                // Parse the date (format: yyyy-MM-dd)
+                String[] dateParts = t.date.split("-");
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+
+                // Check if transaction falls within the date range
+                boolean inRange = false;
+                if (year > startYear && year < endYear) {
+                    inRange = true;
+                } else if (year == startYear && year == endYear) {
+                    inRange = (month >= startMonth && month <= endMonth);
+                } else if (year == startYear) {
+                    inRange = (month >= startMonth);
+                } else if (year == endYear) {
+                    inRange = (month <= endMonth);
+                }
+
+                if (inRange) {
+                    matches.add(t);
+                }
+            } catch (Exception e) {
+                // Skip transactions with invalid date format
+            }
+        }
+
+        if (matches.isEmpty()) {
+            System.out.println("\nNo transactions found for " + reportName);
+        } else {
+            System.out.println("\n---- " + reportName + " ----");
+            System.out.printf("%-12s %-10s %-25s %-20s %10s%n",
+                    "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+            System.out.println("--------------------------------------------------------------------------------");
+
+            for (Transaction t : matches) {
+                System.out.printf("%-12s %-10s %-25s %-20s %10.2f%n",
+                        t.date, t.time, t.description, t.vendor, t.amount);
+            }
         }
     }
     public static void searchByVendor(Scanner in) {
