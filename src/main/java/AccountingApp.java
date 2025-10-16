@@ -87,9 +87,9 @@ public class AccountingApp {
             System.out.print("Enter choice: ");
             String choice = in.nextLine().trim().toUpperCase();
 
-            if (choice.equals("A")) displayAllLedger();
-            else if (choice.equals("D")) System.out.println("Deposits - Coming soon");
-            else if (choice.equals("P")) System.out.println("Payments - Coming soon");
+            if (choice.equals("A")) displayLedger("All");
+            else if (choice.equals("D")) displayLedger("Deposits");
+            else if (choice.equals("P")) displayLedger("Payments");
             else if (choice.equals("R")) System.out.println("Reports - Coming soon");
             else if (choice.equals("H")) inLedger = false;
             else System.out.println("Invalid choice.");
@@ -97,7 +97,8 @@ public class AccountingApp {
     }
 
     // NEW: Display all ledger entries (newest first)
-    public static void displayAllLedger() {
+    // Display ledger with filter (ALL, DEPOSITS, or PAYMENTS)
+    public static void displayLedger(String filterType) {
         List<Transaction> transactions = readTransactions();
 
         if (transactions.isEmpty()) {
@@ -105,11 +106,24 @@ public class AccountingApp {
             return;
         }
 
-        System.out.println("\n---- All Entries ----");
+        System.out.println("\n---- " + filterType + " ----");
         for (Transaction t : transactions) {
-            System.out.println(t.date + "|" + t.time + "|" + t.description + "|" + t.vendor + "|$" + t.amount);
+            boolean shouldDisplay = false;
+
+            if (filterType.equals("ALL")) {
+                shouldDisplay = true;
+            } else if (filterType.equals("Deposits") && t.amount > 0) {
+                shouldDisplay = true;
+            } else if (filterType.equals("Payments") && t.amount < 0) {
+                shouldDisplay = true;
+            }
+
+            if (shouldDisplay) {
+                System.out.println(t.date + " " + t.time + " | " + t.description + " | " + t.vendor + " | $" + t.amount);
+            }
         }
     }
+
 
     // NEW: Read transactions from file and return as list (newest first)
     public static List<Transaction> readTransactions() {
