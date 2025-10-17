@@ -44,7 +44,7 @@ public class AccountingApp {
         System.out.print("Description: ");
         String description = in.nextLine();
 
-        System.out.print("Vendor ");
+        System.out.print("Vendor: ");
         String vendor = in.nextLine();
 
         System.out.print("Enter the amount: ");
@@ -95,6 +95,7 @@ public class AccountingApp {
             else System.out.println("Invalid choice.");
         }
     }
+
     // NEW: Reports menu
     public static void showReportsMenu(Scanner in) {
         boolean inReports = true;
@@ -110,7 +111,7 @@ public class AccountingApp {
             String choice = in.nextLine().trim();
 
             if (choice.equals("1")) displayMonthToDate();
-            else if (choice.equals("2"))displayPreviousMonth();
+            else if (choice.equals("2")) displayPreviousMonth();
             else if (choice.equals("3")) displayYearToDate();
             else if (choice.equals("4")) displayPreviousYear();
             else if (choice.equals("5")) searchByVendor(in);
@@ -118,6 +119,7 @@ public class AccountingApp {
             else System.out.println("Invalid choice.");
         }
     }
+
     // Month To Date report
     public static void displayMonthToDate() {
         LocalDateTime now = LocalDateTime.now();
@@ -199,6 +201,7 @@ public class AccountingApp {
             }
         }
     }
+
     public static void searchByVendor(Scanner in) {
         System.out.print("Enter vendor name: ");
         String searchVendor = in.nextLine().trim();
@@ -217,7 +220,7 @@ public class AccountingApp {
         } else {
             System.out.println("\n---- Transactions for " + searchVendor + " ----");
             System.out.printf("%-12s %-10s %-25s %-20s %10s%n",
-                    "date","time","description","vendor", "amount");
+                    "date", "time", "description", "vendor", "amount");
             System.out.println("--------------------------------------------------------------------------------");
 
             for (Transaction t : matches) {
@@ -295,22 +298,5 @@ public class AccountingApp {
         Collections.reverse(transactions);
 
         return transactions;
-    }
-
-    // Transaction class to hold transaction data
-    static class Transaction {
-        String date;
-        String time;
-        String description;
-        String vendor;
-        double amount;
-
-        Transaction(String date, String time, String description, String vendor, double amount) {
-            this.date = date;
-            this.time = time;
-            this.description = description;
-            this.vendor = vendor;
-            this.amount = amount;
-        }
     }
 }
